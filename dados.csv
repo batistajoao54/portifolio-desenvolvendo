@@ -1,9 +1,9 @@
-data,marca,produto,expecificacao,modelo,quantidade
-22-02-2022,marbelle,caixa,rosa,especialnaturale,3000
-23-02-2022,exito,caixa,preta,padrao,1500
-23-02-2022,excelencia,sacola,comum,sem,3000
-24-02-2022,monza,tapeta,16cm,sem,1000
-25-03-2022,supresababy,tapeta, 14cm,sem,1000
-26-03-2022,exito,tag,azul,sem,10000
-27-03-2022,exito,tag,preta,sem,12000
+data,marca,produto,expecificacao,deposito_enviado,quantidade
+22-02-2022,marbelle,caixa,rosa,deposito,3000
+23-02-2022,exito,caixa,preta,enviado,1500
+23-02-2022,excelencia,sacola,simples,deposito,3000
+24-02-2022,monza,tapeta,16cm,deposito,1000
+25-03-2022,supresababy,tapeta, 14cm,enviado,1000
+26-03-2022,exito,tag,azul,enviado,10000
+27-03-2022,exito,tag,preta,deposito,12000
 
