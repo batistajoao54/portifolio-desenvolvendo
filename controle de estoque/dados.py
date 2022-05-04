@@ -64,6 +64,6 @@ def dados_get():
     df = pd.DataFrame(dicionario)
     return df
 
-print(dados_get())
+
 
 
