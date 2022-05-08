@@ -44,8 +44,8 @@ def dados_get():
     for i in dados[1:]:
         tipos= i[3]
         tipo.append(tipos)
-    return tipo
-'''
+    
+
     modelo = []
 
     for i in dados[1:]:
@@ -66,8 +66,8 @@ def dados_get():
                     f'{dados[0][5]}':quantidade,}
 
     df = pd.DataFrame(dicionario)
-    #return df
-'''
+    return df
+
 print(dados_get())
 
 
