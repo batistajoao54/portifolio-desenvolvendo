@@ -23,25 +23,29 @@ def dados_get():
     for i in dados[1:]:
         datas= i[0]
         data.append(datas)
-
+    
+   
     nome = []
 
     for i in dados[1:]:
         nomes= i[1]
         nome.append(nomes)
+    
 
     marca = []
 
     for i in dados[1:]:
         marcas= i[2]
         marca.append(marcas)
+    
 
     tipo = []
 
     for i in dados[1:]:
         tipos= i[3]
         tipo.append(tipos)
-
+    return tipo
+'''
     modelo = []
 
     for i in dados[1:]:
@@ -62,8 +66,8 @@ def dados_get():
                     f'{dados[0][5]}':quantidade,}
 
     df = pd.DataFrame(dicionario)
-    return df
-
-
+    #return df
+'''
+print(dados_get())
 
 
