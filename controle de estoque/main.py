@@ -1,52 +1,82 @@
-import streamlit as st
-import pandas as pd
+#from typing import Optional
+from fastapi import FastAPI
+#from pydantic import BaseModel
+import facas
 import dados
 
-df = dados.dados_get()
+app = FastAPI()
 
-df_colunas = list(df.columns)
+@app.get('/')
+def read_root():
+    return {"AVISO":"VERSÃO TESTE"}
 
-st.set_page_config(layout='wide')
 
-c1,c2,c3 = st.columns((1,2,1))
+#parte das facas
+#essa funcao me retorna a faca que eu estou procurando
+@app.get('/{faca}')
+def read_root(faca: str): 
+    
+    cima_c1 = facas.cima_c1()
 
-with c2:
-    st.title("CONTROLE DE MERCADORIAS")
+    cima_c2 = facas.cima_c2()
 
-#selecionando as marcas
-marcas = list(df[df_colunas[1]].unique())
-clientes = st.selectbox("MARCAS", marcas)
-df_marcas = df[df[df_colunas[1]] == clientes]
-#st.dataframe(df_marcas)
+    parede = facas.parede()
 
-#selecionando os produtos
-produtos = list(df_marcas[df_colunas[2]].unique())
-produtos_ = st.selectbox("PRODUTO", produtos)
-df_produto = df_marcas[df_marcas[df_colunas[2]]== produtos_]
+    baixo_c1 = facas.baixo_c1()
 
-#selecionando especificacao
-especificacao_ = list(df_produto[df_colunas[3]].unique())
-especificacao = st.selectbox("TIPO", especificacao_)
-df_especificacao = df_produto[df_produto[df_colunas[3]]== especificacao]
-#st.dataframe(df_especificacao)
+    baixo_c2 = facas.baixo_c2()
 
-#tratando a informação para ser exibida
-deposito = df_especificacao[df_especificacao[df_colunas[4]] == 'deposito']
-deposito['quantidade'] = pd.to_numeric(deposito['quantidade'])
-soma = deposito['quantidade'].sum()
-#st.dataframe(deposito)
+    estante_baixo = facas.estante_baixo()
 
-st.markdown(f'## {produtos_} {especificacao}')
-st.metric("QUANTIDADE",value=soma)
+    if faca in cima_c1:
+        local = "ESTA EM CIMA EM C1"
+    elif faca in cima_c2:
+        local = "ESTA EM CIMA EM C2"
+    elif faca in parede:
+        local = "ESTA NA PAREDE"
+    elif faca in baixo_c1:
+        local = "ESTA EM BAIXO EM C1"
+    elif faca in baixo_c2:
+        local = "ESTA EM BAIXO EM C2"
+    elif faca in estante_baixo:
+        local = "ESTA EM BAIXO NA ESTANTE"
+    else:
+        local = "NÃO ENCONTRADO" 
 
-#informação dos enviados
-st.markdown('## ENVIADOS')
-enviado = df_especificacao[df_especificacao[df_colunas[4]] == 'enviado']
-enviado['data'] = pd.to_datetime(enviado['data']).dt.strftime('%d-%m-%y')
-#organizando o index final
-enviados = enviado.reset_index()
-enviados.drop(['index'], axis=1, inplace=True)
+    return {"FACA":faca, "OBS":local}
 
-st.table(enviados.sort_values(by=['data'],ascending=False).head(10))
 
+#criando a parte dos produtos que ja estão encaixotados
+#essa funcao me retorna todas as marcas que tenho em dados
+@app.get("/enviado/marca")
+def deposito():
+    marca = dados.marca()
+    return marca
+
+#criando a parte que separa os produtos por mes
+#essa funcao me retorna todas as marcas por mes
+@app.get("/enviado/marca/mes/{mes}")
+def mes(mes: str):
+    mes_ = dados.mes_geral(mes)
+    if mes_ == {}:
+        mes_ = {"ERRO": "DIGITE UM MES VALIDO [01,02,03,...]", "OBS":"PODE OCORRER DE NAO TERMOS DADOS"}
+
+    return mes_
+
+
+#criando a parte que separa os produtos por marca
+#essa funcao me retorna os produtos por marca geral com todos os dados que tenho
+@app.get("/enviado/marca/{marca}")
+def produto(marca:str):
+    produto = dados.produtos(marca)
+    return produto
+
+#ESSA PARTE AINDA NAO USO CORRETAMENTE
+#@app.get("/items/{item_id}")
+#def read_item(item_id: int, q: Optional[str]=None):
+#    return {"item_id": item_id, "q":q}
+
+#@app.put("/items/{item_id}")
+#def update_item(item_id: int, item: Item):
+#    return {"item_price": item.price, "item_id": item_id}
 

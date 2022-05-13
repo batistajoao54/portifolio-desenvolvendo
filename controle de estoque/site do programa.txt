@@ -1,1 +1,1 @@
-https://revisao-estoque.herokuapp.com/
+https://treinoh.herokuapp.com/
