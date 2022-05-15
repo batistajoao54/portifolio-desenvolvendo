@@ -63,6 +63,13 @@ def dados_get():
     df = pd.DataFrame(dicionario)
 
     return df
+
+#essa função acima pode ser substituida por
+#def dados_get():
+#   df = pd.read_csv('https://raw.githubusercontent.com/batistajoao54/portifolio-desenvolvendo/main/deposito.csv')
+#   return df
+
+
 #print(dados_get())
 
 #criando uma funcao para separar as marcas
@@ -121,4 +128,4 @@ def produtos(empresa):
     return marca_
 
 
-print(produtos('exito'))
+#print(produtos('exito'))
