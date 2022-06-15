@@ -1,0 +1,9 @@
+dia,mes,ano,pessoa,marca,cor,quantidade,status,os
+13,junho,2022,gerlucio,exito,vermelha,500,pegou,mes_de_junho
+12,junho,2022,efigenia,exito,verde,250,pegou,mes_de_junho
+20,junho,2022,gerlucio,exito,vermelha,450,entregou,mes_de_junho
+22,junho,2022,efigenia,exito,verde,150,entregou,mes_de_junho
+10,junho,2022,rikelme,marbelle,rosa,600,pegou,mes_de_junho
+23,junho,2022,rikelme,marbelle,rosa,599,entregou,mes_de_junho
+15,junho,2022,gerlucio,marbelle,vermelha,300,pegou,mes_de_junho
+14,junho,2022,gerlucio,marbelle,vermelha,200,pegou,mes_de_junho
