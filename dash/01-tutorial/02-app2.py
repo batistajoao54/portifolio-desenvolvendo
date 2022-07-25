@@ -41,13 +41,14 @@ app2.layout=html.Div(style={'backgroundColor':colors['background']},children=[
     ),
 
     dcc.Graph(
-        id = 'exemplo-grafico-2',
+        id='exemplo-grafico-2',
         figure=fig
-    )
+    ),
+
 ])
 
 if __name__ == '__main__':
-    app2.run_server(debug = True)
+    app2.run_server(debug=True)
 
 
 
