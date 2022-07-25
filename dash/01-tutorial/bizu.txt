@@ -1,0 +1,23 @@
+import pandas as pd
+import plotly.express as px
+import plotly.figure_factory as ff
+
+df = pd.read_csv('/content/drive/MyDrive/jupterdash/dados.csv')
+df
+
+df_grupo = df[['pessoa','status','marca','quantidade']].groupby(['status','pessoa','marca']).sum().reset_index()
+df_grupo
+
+fig = px.bar(df_grupo,x='pessoa',y='quantidade',color='status',barmode='group',text_auto=True)
+fig.show()
+
+fig2 = ff.create_table(df,height_constant=30)
+fig2.show()
+
+df_clima = pd.read_csv('/content/drive/MyDrive/jupterdash/clima.csv')
+df_clima
+
+df_clima_grupo = df_clima[['EstacaoCodigo','Data','NumDiasDeChuva']].groupby(['EstacaoCodigo','Data']).sum().reset_index()
+
+fig3 = px.bar(df_clima_grupo,x='Data',y='NumDiasDeChuva',color='EstacaoCodigo',text_auto=True)
+fig3.show()
