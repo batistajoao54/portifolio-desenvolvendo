@@ -1,0 +1,18 @@
+Lista de nomes aleatórios
+
+João,Maria,Iris,Camila,Julia,Lucas,Anderson,Gabriel,Talita,
+
+1, casa, G
+2, carro, M
+3, bike, P
+4, lixo, PP
+5, mesa, X
+Lista de nomes aleatórios
+
+João,Maria,Iris,Camila,Julia,Lucas,Anderson,Gabriel,Talita,
+
+1, casa@, G
+2, carro?, M
+3, biké, P
+4, lixô, PP
+5, me\sa, X
