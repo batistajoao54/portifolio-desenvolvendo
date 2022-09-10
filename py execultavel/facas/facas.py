@@ -114,7 +114,7 @@ def nome():
         saida_dados(saida)
     
     else:
-        saida = "NÃO ENCONTRADA!"
+        saida = "NÃO ENCONTRADA!                         "
         saida_dados(saida)
     
 
