@@ -1,1 +1,7 @@
 esse é apenas pra att
+
+no terminal digitar:
+
+pyinstaller --onefile --noconsole nomeaquivo.py
+
+e esperar...
