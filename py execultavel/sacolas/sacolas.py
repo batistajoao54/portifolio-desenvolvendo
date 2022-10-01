@@ -5,8 +5,6 @@ from tkinter.ttk import *
 from tkinter import *
 
 
-
-
 #cores
 branca = '#f4f4f2'
 verde = '#848775'
@@ -18,8 +16,10 @@ verde_escuro = "#334242"
 
 df_colador = pd.read_csv("coladores.csv")
 df_os = pd.read_csv('os.csv')
-df_dados = pd.read_csv("entrada e saida.csv")
+#df_dados = pd.read_csv("entrada e saida.csv")
 
+#df_total = pd.concat([df_os,df_dados])
+#df_total.to_csv('entrada e saida.csv', index=False)
 
 #criando uma listra com o nome dos coladores e as OS
 
@@ -88,7 +88,7 @@ label_descricao.place(x=330,y=5)
 
 def os_busca():
     nome = entry_os.get()
-    df_os_escolha = df_os[df_os["OS"] == nome]
+    df_os_escolha = df_os[df_os["OS"] == nome].copy()
     df_os_escolha['texto'] =df_os_escolha['MARCA']+' '+df_os_escolha['TAMANHO']+" "+df_os_escolha['COR']
     texto = df_os_escolha.iloc[0,10]
     
@@ -140,7 +140,7 @@ def atualiza():
     quantidade = entry_quantidade.get()
     status_final = entry_status.get()
     
-    df_os_atualiza = df_os[df_os["OS"] == osbusca]
+    df_os_atualiza = df_os[df_os["OS"] == osbusca].copy()
     
     marca = df_os_atualiza.iloc[0,4]
     tamanho = df_os_atualiza.iloc[0,5]
@@ -151,7 +151,7 @@ def atualiza():
 def avancado():
     lista = atualiza()
     cabeçalho = ['DIA','MES','ANO','OS','MARCA','TAMANHO','COR','COLADOR''','QUANTIDADE','STATUS']
-    print(lista)
+    #print(lista)
     with open("correria.csv","w", newline="") as file:
         writer = csv.writer(file, delimiter=",")
         writer.writerow(cabeçalho)
@@ -162,32 +162,25 @@ def avancado():
     
     df_merge = pd.concat([df,df2])
     df_merge.to_csv('entrada e saida.csv', index=False)
-    
+
+    df_resposta = pd.read_csv("entrada e saida.csv")
+    saida = df_resposta.tail(1).copy()
+
+    label_5 = Label(frame_resposta, text=f"{saida.iloc[0,3]} {saida.iloc[0,4]} {saida.iloc[0,5]} {saida.iloc[0,6]} {saida.iloc[0,7]} {saida.iloc[0,8]} {saida.iloc[0,9]}                               ",
+                    font=('arial 10 bold'),
+                    fg=preto_cinza, bg=verde, anchor=NE)
+    label_5.place(x=5, y=35)
 
 botao_pesquisar = Button(frame_pesquisa,text="ATUALIZAR",font=('Ivy 8 bold'),bg=preto_cinza,
                          fg=amarelo,relief=RAISED,overrelief=RIDGE,command=avancado)
 botao_pesquisar.place(x=420,y=97)
 
 
-
 #criando algumas saidas de dados no frame resposta
-label_titulo = Label(frame_resposta, text="REGISTROS",font=('arial 10 bold'),
+
+label_titulo = Label(frame_resposta, text="UTIMO REGISTRO",font=('arial 10 bold'),
                    fg = preto_cinza, bg=verde,anchor=NE)
 label_titulo.place(x=300,y=5)
-
-label_5 = Label(frame_resposta, text="ultima linha",font=('arial 10 bold'),
-                   fg = preto_cinza, bg=verde,anchor=NE)
-label_5.place(x=5,y=35)
-
-label_4 = Label(frame_resposta, text="penutima linha",font=('arial 10 bold'),
-                   fg = preto_cinza, bg=verde,anchor=NE)
-label_4.place(x=5,y=65)
-
-label_3 = Label(frame_resposta, text="antipenultima linha",font=('arial 10 bold'),
-                   fg = preto_cinza, bg=verde,anchor=NE)
-label_3.place(x=5,y=95)
-
-
 
 janela.mainloop()
 
