@@ -45,7 +45,7 @@ if pagina == True:
 
     with c2:
         df_dropidez = df_os[df_os['STATUS'] != "TOTAL OS"].copy()
-        coladores = df_dropidez.groupby(["COLADOR", "MARCA", "TAMANHO", "COR", "OS", "STATUS"]).sum().reset_index()
+        coladores = df_dropidez.groupby(["COLADOR", "MARCA", "TAMANHO", "COR", "OS", "STATUS",'DIA','MES','ANO']).sum().reset_index()
         coladores_enviado = coladores[coladores["STATUS"] == "ENVIADO"]
         coladores_recebido = coladores[coladores["STATUS"] == "RECEBIDO"]
 
@@ -53,8 +53,26 @@ if pagina == True:
 
         fig_final = px.bar(novo_coladores, x="COLADOR", y="QUANTIDADE",
                            color="STATUS", text_auto=True,
-                           barmode="group", height=400, width=400,
+                           barmode="group", height=400, width=600,
                            title="COLADORES")
         st.plotly_chart(fig_final)
 
+        #transformando os número em data
+        df_data = df_dropidez.copy()
+        df_data["DATA"] = f"{df_data.iloc[0,0]:.0f}-{df_data.iloc[0,1]:.0f}-{df_data.iloc[0,2]:.0f}"
+        df_data_atual = df_data[df_data['COLADOR'] != "IDEZ"]
+        lista_data = list(df_data_atual['COLADOR'].unique())
+        
+        registros = st.checkbox("Verificar tabelas")
+        
+        if registros == True:
+            pesquisa = st.selectbox("Colador", lista_data)
+
+            df_tabela = df_data_atual[['DATA',"COLADOR",'QUANTIDADE','STATUS']]
+            
+            df_tabela_final = df_tabela[df_tabela['COLADOR'] == pesquisa]
+            df_apresentacao = df_tabela_final[['DATA','QUANTIDADE','STATUS']]
+            st.table(df_apresentacao)
+        
+        
     st.header("Dados gerais de todas as OS ativas")
