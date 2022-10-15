@@ -1,1 +1,4 @@
 pip install protobuf==3.19.0
+
+pip install openpyxl
+plotly-express
