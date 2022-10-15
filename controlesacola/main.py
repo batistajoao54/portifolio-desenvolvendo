@@ -10,10 +10,18 @@ dados = st.sidebar.file_uploader("")
 pagina = st.sidebar.checkbox('dados carregados')
 
 if pagina == True:
-    df = pd.read_csv(dados)
+    df = pd.read_excel(dados)
     df['QUANTIDADE'] = pd.to_numeric(df["QUANTIDADE"])
     
-    lista_Os = df.OS.unique()
+    lista_marca = df.MARCA.unique()
+    
+    #SELECIONANDO AS MARCAS
+    cx_marca = st.sidebar.selectbox("Escolha uma MARCA!",lista_marca)
+    
+    df_marca = df[df['MARCA'] == cx_marca]
+    
+    lista_Os = df_marca.OS.unique()
+    
 
     #SELECIONADO A OS
     cx_os = st.sidebar.selectbox("Selecione uma OS", lista_Os)
