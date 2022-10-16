@@ -41,11 +41,11 @@ if pagina == "ATUALIZAR":
         with c10:
             data_status = st.selectbox('STATUS',['TOTAL OS'])
         
-        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status] #uma lista com todos os inputs coletados
+        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status,'N'] #uma lista com todos os inputs coletados
         
         botao_atualizar = st.button('SALVAR') #criando um botao 
         if botao_atualizar == True: #ativando o botao
-            cabecalho = ['DIA','MES','ANO','OS','MARCA','TAMANHO','COR','COLADOR','QUANTIDADE','STATUS']
+            cabecalho = ['DIA','MES','ANO','OS','MARCA','TAMANHO','COR','COLADOR','QUANTIDADE','STATUS','PAGO']
             #print(lista)
             with open("memoria.csv","w", newline="") as file: #escrevendo um aquivo memoria com os dados coletados
                 writer = csv.writer(file, delimiter=",")
@@ -113,11 +113,11 @@ if pagina == "ATUALIZAR":
         with c11:
             data_status = st.selectbox('STATUS',['ENVIADO','RECEBIDO'])
         
-        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status]
+        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status,'N']
         
         botao_atualizar = st.button('SALVAR')
         if botao_atualizar == True:
-            cabecalho = ['DIA','MES','ANO','OS','MARCA','TAMANHO','COR','COLADOR','QUANTIDADE','STATUS']
+            cabecalho = ['DIA','MES','ANO','OS','MARCA','TAMANHO','COR','COLADOR','QUANTIDADE','STATUS','PAGO']
             #print(lista)
             with open("memoria.csv","w", newline="") as file:
                 writer = csv.writer(file, delimiter=",")
@@ -209,8 +209,8 @@ if pagina == 'ANALISAR':
             if registros == True:
                 pesquisa = st.selectbox("Colador", lista_data)
 
-                df_tabela = df_data_atual[['DATA',"COLADOR",'QUANTIDADE','STATUS']]
+                df_tabela = df_data_atual[['DATA',"COLADOR",'QUANTIDADE','STATUS','PAGO']]
             
                 df_tabela_final = df_tabela[df_tabela['COLADOR'] == pesquisa]
-                df_apresentacao = df_tabela_final[['DATA','QUANTIDADE','STATUS']]
+                df_apresentacao = df_tabela_final[['DATA','QUANTIDADE','STATUS','PAGO']]
                 st.table(df_apresentacao)
