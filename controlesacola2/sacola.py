@@ -209,8 +209,8 @@ if pagina == 'ANALISAR':
             if registros == True:
                 pesquisa = st.selectbox("Colador", lista_data)
 
-                df_tabela = df_data_atual[['DATA',"COLADOR",'QUANTIDADE','STATUS','PAGO']]
+                df_tabela = df_data_atual[['DIA','MES','ANO',"COLADOR",'QUANTIDADE','STATUS','PAGO']]
             
                 df_tabela_final = df_tabela[df_tabela['COLADOR'] == pesquisa]
-                df_apresentacao = df_tabela_final[['DATA','QUANTIDADE','STATUS','PAGO']]
+                df_apresentacao = df_tabela_final[['DIA','MES','ANO','QUANTIDADE','STATUS','PAGO']]
                 st.table(df_apresentacao)
