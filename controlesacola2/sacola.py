@@ -41,7 +41,7 @@ if pagina == "ATUALIZAR":
         with c10:
             data_status = st.selectbox('STATUS',['TOTAL OS'])
         
-        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status,'N'] #uma lista com todos os inputs coletados
+        lista_cadrastro = [data_dia.strip(),data_mes.strip(),data_ano.strip(),data_os.strip(),data_marca.strip(),data_tamanho,data_cor.strip(),data_colador,data_quantidade.strip(),data_status,'N'] #uma lista com todos os inputs coletados
         
         botao_atualizar = st.button('SALVAR') #criando um botao 
         if botao_atualizar == True: #ativando o botao
@@ -113,7 +113,7 @@ if pagina == "ATUALIZAR":
         with c11:
             data_status = st.selectbox('STATUS',['ENVIADO','RECEBIDO'])
         
-        lista_cadrastro = [data_dia,data_mes,data_ano,data_os,data_marca,data_tamanho,data_cor,data_colador,data_quantidade,data_status,'N']
+        lista_cadrastro = [data_dia.strip(),data_mes.strip(),data_ano.strip(),data_os,data_marca,data_tamanho,data_cor,data_colador.strip(),data_quantidade.strip(),data_status,'N']
         
         botao_atualizar = st.button('SALVAR')
         if botao_atualizar == True:
