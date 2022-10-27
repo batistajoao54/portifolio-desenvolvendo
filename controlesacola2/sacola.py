@@ -1,3 +1,4 @@
+from ast import Try
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -155,6 +156,7 @@ if pagina == 'ANALISAR':
     cx_os = st.sidebar.selectbox("Selecione uma OS", lista_Os) #criando uma selecao para as os
     df_os2 = df_atual[df_atual["OS"] == cx_os] #selecionado apeanas os dados com as os
     df_total2 = df_os2[df_os2['STATUS'] == "TOTAL OS"] #criando os dados apenas com as os
+    soma_df_total2 = df_total2.groupby(["OS", "TAMANHO", "STATUS",]).sum().reset_index() #add para resolver o problema da os duploicada
     
     #fazendo a selecao do total de enviados e recebidos
     df_base = df[df['OS'] == cx_os]
@@ -166,19 +168,20 @@ if pagina == 'ANALISAR':
     juncao = soma_enviado.groupby(["OS", "TAMANHO", "STATUS",]).sum().reset_index()
     juncao2 = soma_recebido.groupby(["OS", "TAMANHO", "STATUS",]).sum().reset_index()
 
-    df_total_final = pd.concat([df_total2,juncao,juncao2]) #juntando todas as informaçoes que precisamos
+    df_total_final = pd.concat([soma_df_total2,juncao,juncao2]) #juntando todas as informaçoes que precisamos
     
     c1,c,c2 = st.columns([1,0.2,1]) #criando outras colunas que iremos usar
     
     #criando o primeiro grafico
     with c1:
+       
         fig_inicial = px.bar(df_total_final, x="OS", y="QUANTIDADE", color='STATUS',
                              barmode='group', height=400, width=400,
                              text_auto=True,
                              title=f"SACOLAS {df_total2.iloc[0,4]} {df_total2.iloc[0,5]} {df_total2.iloc[0,6]}")
-
         st.plotly_chart(fig_inicial)
-    
+       
+            
     with c2:
         df_dropidez = df_os2[df_os2['STATUS'] != "TOTAL OS"].copy()
         coladores = df_dropidez.groupby(["COLADOR", "MARCA", "TAMANHO", "COR", "OS", "STATUS",]).sum().reset_index()
@@ -188,15 +191,17 @@ if pagina == 'ANALISAR':
         novo_coladores = pd.concat([coladores_enviado, coladores_recebido]) #juntando as informaç~es dos coladores
 
         fig2 = st.checkbox("VER COLADORES")
-        
-        if fig2 == True:
+        try:
+            if fig2 == True:
             
-            fig_final = px.bar(novo_coladores, x="COLADOR", y="QUANTIDADE",
-                               color="STATUS", text_auto=True,
-                               barmode="group", height=400, width=500,
-                               title="COLADORES")
+                    fig_final = px.bar(novo_coladores, x="COLADOR", y="QUANTIDADE",
+                                       color="STATUS", text_auto=True,
+                                       barmode="group", height=400, width=500,
+                                       title="COLADORES")
 
-            st.plotly_chart(fig_final)
+                    st.plotly_chart(fig_final)
+        except:
+            fig_final = []
         
         #transformando os número em data
             df_data = df_dropidez.copy()
