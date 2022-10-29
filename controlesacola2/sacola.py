@@ -1,4 +1,3 @@
-from ast import Try
 import pandas as pd
 import plotly.express as px
 import streamlit as st
@@ -6,12 +5,12 @@ import csv
 
 st.set_page_config(layout='wide')
 
-df =pd.read_csv('entrada e saida.csv')
+df =pd.read_excel('entrada e saida.xlsx')
 #df['QUANTIDADE'] = pd.to_numeric(df['QUANTIDADE'])
 df_os = pd.read_csv('dados_os.csv')
 #df_os['QUANTIDADE'] = pd.to_numeric(df_os['QUANTIDADE'])
 
-pagina = st.sidebar.radio('',['ATUALIZAR', 'ANALISAR'])
+pagina = st.sidebar.radio('',['ATUALIZAR', 'ANALISAR','COLADORES'])
 
 if pagina == "ATUALIZAR":
     
@@ -61,7 +60,7 @@ if pagina == "ATUALIZAR":
         df_visualizacao = pd.read_csv('dados_os.csv') #relendo os arquivos agora atualizado com os dados novos
         st.write("ULTIMOS DADOS REGISTRADOS")
         with c11:
-            quantidade_dados = st.selectbox('',[3,5,4,2,1,10,15,20,30])
+            quantidade_dados = st.selectbox('',[3,5,4,2,1,10,15,20,30,40,50,100,200])
         st.table(df_visualizacao.tail(int(quantidade_dados))) #bizualizando os dados novos
     
     ###########################################################################    
@@ -112,7 +111,7 @@ if pagina == "ATUALIZAR":
         with c10:
             data_quantidade = st.text_input('QUANTIDADE')
         with c11:
-            data_status = st.selectbox('STATUS',['ENVIADO','RECEBIDO'])
+            data_status = st.selectbox('STATUS',['ENVIADO','RECEBIDO','DESATIVAR'])
         
         lista_cadrastro = [data_dia.strip(),data_mes.strip(),data_ano.strip(),data_os,data_marca,data_tamanho,data_cor,data_colador.strip(),data_quantidade.strip(),data_status,'N']
         
@@ -127,19 +126,19 @@ if pagina == "ATUALIZAR":
             
             df_memoria = pd.read_csv('memoria.csv')
             df_final = pd.concat([df,df_memoria])
-            df_final.to_csv('entrada e saida.csv',index=False)
+            df_final.to_excel('entrada e saida.xlsx',index=False)
         
         c12,c13,c14 = st.columns([1,2,2])
-        df_visualizacao = pd.read_csv('entrada e saida.csv')
+        df_visualizacao = pd.read_excel('entrada e saida.xlsx')
         st.write("ULTIMOS REGISTRADOS")
         with c12:
-            quantidade_dados = st.selectbox('',[3,5,4,2,1,10,15,20,30])
+            quantidade_dados = st.selectbox('',[3,5,4,2,1,10,15,20,30,40,50,100,200])
         st.table(df_visualizacao.tail(int(quantidade_dados)))
 
 #INICAIANDO A SEGUNDA PARTE DO SISTEMA, ANALISE DOS DADOS
 if pagina == 'ANALISAR':
     df2 = pd.read_csv('dados_os.csv')
-    df3 = pd.read_csv('entrada e saida.csv')
+    df3 = pd.read_excel('entrada e saida.xlsx')
     df_completo = pd.concat([df2,df3])
     df_completo.to_excel('dadosatuais.xlsx', index = False) #essa primeira parte serve pra juntar e salva os dados atuais
     
@@ -179,9 +178,9 @@ if pagina == 'ANALISAR':
                              barmode='group', height=400, width=400,
                              text_auto=True,
                              title=f"SACOLAS {df_total2.iloc[0,4]} {df_total2.iloc[0,5]} {df_total2.iloc[0,6]}")
-        st.plotly_chart(fig_inicial)
+        st.plotly_chart(fig_inicial,use_container_width=True)
        
-            
+       
     with c2:
         df_dropidez = df_os2[df_os2['STATUS'] != "TOTAL OS"].copy()
         coladores = df_dropidez.groupby(["COLADOR", "MARCA", "TAMANHO", "COR", "OS", "STATUS",]).sum().reset_index()
@@ -189,33 +188,93 @@ if pagina == 'ANALISAR':
         coladores_recebido = coladores[coladores["STATUS"] == "RECEBIDO"]
 
         novo_coladores = pd.concat([coladores_enviado, coladores_recebido]) #juntando as informaç~es dos coladores
-
+        
         fig2 = st.checkbox("VER COLADORES")
-        try:
-            if fig2 == True:
-            
-                    fig_final = px.bar(novo_coladores, x="COLADOR", y="QUANTIDADE",
-                                       color="STATUS", text_auto=True,
-                                       barmode="group", height=400, width=500,
-                                       title="COLADORES")
 
-                    st.plotly_chart(fig_final)
-        except:
-            fig_final = []
+        if fig2 == True:
+        
+            fig_final = px.bar(novo_coladores, x="COLADOR", y="QUANTIDADE",
+                               color="STATUS", text_auto=True,
+                               barmode="group", height=400, width=500,
+                               title="COLADORES")
+            st.plotly_chart(fig_final,use_container_width=True)
+        
         
         #transformando os número em data
-            df_data = df_dropidez.copy()
-            df_data["DATA"] = f"{df_data.iloc[0,0]:.0f}-{df_data.iloc[0,1]:.0f}-{df_data.iloc[0,2]:.0f}"
-            df_data_atual = df_data[df_data['COLADOR'] != "IDEZ"]
-            lista_data = list(df_data_atual['COLADOR'].unique())
+            try:
+                df_data = df_dropidez.copy()
+                df_data["DATA"] = f"{df_data.iloc[0,0]:.0f}-{df_data.iloc[0,1]:.0f}-{df_data.iloc[0,2]:.0f}"
+                df_data_atual = df_data[df_data['COLADOR'] != "IDEZ"]
+                lista_data = list(df_data_atual['COLADOR'].unique())
         
-            registros = st.checkbox("Verificar tabelas")
-        
-            if registros == True:
-                pesquisa = st.selectbox("Colador", lista_data)
-
-                df_tabela = df_data_atual[['DIA','MES','ANO',"COLADOR",'QUANTIDADE','STATUS','PAGO']]
+                registros = st.checkbox("Verificar tabelas")
             
-                df_tabela_final = df_tabela[df_tabela['COLADOR'] == pesquisa]
-                df_apresentacao = df_tabela_final[['DIA','MES','ANO','QUANTIDADE','STATUS','PAGO']]
-                st.table(df_apresentacao)
+                if registros == True:
+                    pesquisa = st.selectbox("Colador", lista_data)
+
+                    df_tabela = df_data_atual[['DIA','MES','ANO',"COLADOR",'QUANTIDADE','STATUS','PAGO']]
+
+                    df_tabela_final = df_tabela[df_tabela['COLADOR'] == pesquisa]
+                    df_apresentacao = df_tabela_final[['DIA','MES','ANO','QUANTIDADE','STATUS','PAGO']]
+                    st.table(df_apresentacao)
+            except:
+                st.write("DADOS AINDA NÃO ADICIONADOS!")
+
+if pagina == "COLADORES": #criando a parte de vizualizaçao dos pagantes
+    df_pagos = pd.read_excel('entrada e saida.xlsx') #carregando os dados que iremos usar
+    df_pagos.to_csv('desativados.csv',index=False) #importante para a leitura dos dados
+    df_pagos2 = df_pagos[df_pagos['STATUS'] != 'DESATIVAR'].copy() #tirando um status
+    
+    #tentando tirar as OS desativadas da selecao
+    df_desativar = df_pagos[df_pagos['STATUS'] == 'DESATIVAR'].copy()
+    lista_os_desativar = df_desativar['OS'].unique()
+    
+    #um loop pra tentar tirar todas as os desativadas
+    for i in lista_os_desativar:
+        df_desativado = pd.read_csv('desativados.csv')
+        df_atoa = df_desativado[df_desativado['OS'] != i]
+        df_atoa.to_csv('desativados.csv',index=False)
+        df_desativado = pd.read_csv('desativados.csv')
+            
+   
+    #st.write(df_desativado)    
+    
+    df_pagos_agrupado = df_desativado.groupby(['COLADOR','STATUS']).sum().reset_index() #juntando os dados necessarios para a primeira vizualização
+    #st.markdown("""#### RESUMO DA QUANTIDADE DE SACOLA POR COLADOR """)
+    #st.write("Obs: TODAS AS OS (ATIVAS E NÃO ATIVAS)")  
+    
+    figura_dados_total = px.bar(df_pagos_agrupado,x='COLADOR',y='QUANTIDADE',
+                                color="STATUS",text_auto=True,
+                               barmode="group", height=500, width=1000,
+                               title="TOTAL DE SACOLA POR COLADOR")
+    
+    st.plotly_chart(figura_dados_total,use_container_width=True)
+    
+    df_pagos_agrupado2 = df_desativado.groupby(['COLADOR','STATUS','PAGO']).sum().reset_index() #recriando para add a variavel pago
+    
+    df_pagos_agrupado_recebidos = df_pagos_agrupado2[df_pagos_agrupado2['STATUS'] == 'RECEBIDO'].copy() #separando apenas os recebidos
+    
+    figura_dados_total_pagos = px.bar(df_pagos_agrupado_recebidos,x='COLADOR',y='QUANTIDADE',
+                                color="PAGO",text_auto=True,
+                               barmode="group", height=500, width=1000,
+                               title="VISUALIZAÇÃO DOS PAGOS")
+    
+    st.plotly_chart(figura_dados_total_pagos,use_container_width=True)
+
+    sacola_colador = st.checkbox("VER SACOLAS POR COLADOR")
+    lista_colador_pago = list(df_desativado['COLADOR'].unique())
+    
+    if sacola_colador == True:
+        cx_pago = st.selectbox('COLADOR',lista_colador_pago)
+        
+        df_colador_marca = df_desativado[df_desativado['COLADOR'] == cx_pago]
+        
+        df_colador_marca_juncao = df_colador_marca.groupby(['MARCA','STATUS',]).sum().reset_index() #juntndo os necessarios
+    
+        figura_colador_marcas = px.bar(df_colador_marca_juncao,x='MARCA',y='QUANTIDADE',
+                                        color="STATUS",text_auto=True,
+                                        barmode="group", height=500, width=1000,
+                                        title="VISUALIZAÇÃO DOS PAGOS")
+        
+        st.plotly_chart(figura_colador_marcas,use_container_width=True)
+    

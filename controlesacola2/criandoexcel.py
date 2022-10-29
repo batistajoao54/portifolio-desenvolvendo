@@ -6,4 +6,4 @@ df2 = pd.read_csv('entrada e saida.csv')
 
 df3 = pd.concat([df,df2])
 
-df3.to_excel('dadosatuais.xlsx', index=False)
+#df3.to_excel('entrada e saida.xlsx', index=False)
