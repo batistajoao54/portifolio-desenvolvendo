@@ -134,7 +134,12 @@ if pagina == "ATUALIZAR":
         with c12:
             quantidade_dados = st.selectbox('',[3,5,4,2,1,10,15,20,30,40,50,100,200])
         st.table(df_visualizacao.tail(int(quantidade_dados)))
-
+        
+        desativados_botao = st.checkbox("VER OS DESATIVADAS")
+        if desativados_botao == True:
+            df_desativados_leitura = df_visualizacao[df_visualizacao['STATUS'] == "DESATIVAR"].copy()
+            st.write(df_desativados_leitura)
+            st.write("OBS: PARTE EM DESENVOLVIMENTO")
 #INICAIANDO A SEGUNDA PARTE DO SISTEMA, ANALISE DOS DADOS
 if pagina == 'ANALISAR':
     df2 = pd.read_csv('dados_os.csv')
@@ -235,9 +240,6 @@ if pagina == "COLADORES": #criando a parte de vizualizaçao dos pagantes
         df_atoa = df_desativado[df_desativado['OS'] != i]
         df_atoa.to_csv('desativados.csv',index=False)
         df_desativado = pd.read_csv('desativados.csv')
-            
-   
-    #st.write(df_desativado)    
     
     df_pagos_agrupado = df_desativado.groupby(['COLADOR','STATUS']).sum().reset_index() #juntando os dados necessarios para a primeira vizualização
     #st.markdown("""#### RESUMO DA QUANTIDADE DE SACOLA POR COLADOR """)
