@@ -1,5 +1,4 @@
 import streamlit as st
-import plotly.exceptions as px
 
 import cadrastar_os
 import cadrastar_colador
