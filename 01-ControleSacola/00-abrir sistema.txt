@@ -1,0 +1,8 @@
+1 - abrir cmd na janela pesquisar abaixo lado do iconi window
+
+
+3 - copiar o endereço da pasta:
+cd C:\Users\PC\Desktop\sistema2
+
+4 - digitar:
+streamlit run sacola.py
